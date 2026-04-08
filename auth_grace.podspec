@@ -3,9 +3,9 @@ Pod::Spec.new do |s|
   s.version          = '0.0.1'
   s.summary          = 'Smart biometric auth with grace period.'
   s.description      = 'Skips the biometric prompt if the phone was recently unlocked, exactly like GPay.'
-  s.homepage         = 'https://github.com/yourusername/auth_grace'
+  s.homepage         = 'https://github.com/vijayrockers/auth_grace'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'Your Company' => 'email@example.com' }
+  s.author           = { 'vijayrockers' => 'email@example.com' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'

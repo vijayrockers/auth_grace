@@ -7,19 +7,21 @@
 
 ## 1. Package Overview
 
-| Field | Value |
-|---|---|
-| Package name | `auth_grace` |
-| Type | Flutter federated plugin |
-| Platforms | Android, iOS |
-| Dart SDK | `>=3.0.0 <4.0.0` |
-| Flutter SDK | `>=3.10.0` |
-| License | MIT |
+| Field        | Value                    |
+| ------------ | ------------------------ |
+| Package name | `auth_grace`             |
+| Type         | Flutter federated plugin |
+| Platforms    | Android, iOS             |
+| Dart SDK     | `>=3.0.0 <4.0.0`         |
+| Flutter SDK  | `>=3.10.0`               |
+| License      | MIT                      |
 
 ### One-line description
+
 > Smart biometric authentication with automatic grace period — skips the prompt if the phone was recently unlocked, exactly like GPay.
 
 ### Problem it solves
+
 `local_auth` only shows a biometric prompt. It has no concept of a grace period. Developers building fintech, wallet, or sensitive apps have to manually implement Android Keystore grace period logic + iOS Keychain timestamp tracking. `auth_grace` packages this into a single clean API.
 
 ---
@@ -60,11 +62,12 @@ auth_grace/
 ## 3. Dependencies
 
 ### pubspec.yaml
+
 ```yaml
 name: auth_grace
 description: Smart biometric auth with grace period. Skips prompt if phone was recently unlocked.
 version: 0.0.1
-homepage: https://github.com/yourusername/auth_grace
+homepage: https://github.com/vijayrockers/auth_grace
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
@@ -187,19 +190,20 @@ await strictAuth.authenticate();
 
 Channel name: `"auth_grace"`
 
-| Method | Arguments | Returns | Description |
-|---|---|---|---|
-| `generateKey` | `gracePeriodSeconds: int` | `bool` | Create Keystore key with grace window |
-| `isWithinGracePeriod` | none | `bool` | Check if phone unlocked recently |
-| `keyExists` | none | `bool` | Check if key already generated |
-| `deleteKey` | none | `bool` | Delete key on logout/reset |
-| `isHardwareBacked` | none | `bool` | Check if device has secure TEE |
+| Method                | Arguments                 | Returns | Description                           |
+| --------------------- | ------------------------- | ------- | ------------------------------------- |
+| `generateKey`         | `gracePeriodSeconds: int` | `bool`  | Create Keystore key with grace window |
+| `isWithinGracePeriod` | none                      | `bool`  | Check if phone unlocked recently      |
+| `keyExists`           | none                      | `bool`  | Check if key already generated        |
+| `deleteKey`           | none                      | `bool`  | Delete key on logout/reset            |
+| `isHardwareBacked`    | none                      | `bool`  | Check if device has secure TEE        |
 
 ---
 
 ## 6. Android Native — Full Implementation
 
 ### 6.1 AndroidManifest.xml
+
 ```xml
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
@@ -393,6 +397,7 @@ class AuthGracePlugin : FlutterPlugin, MethodChannel.MethodCallHandler {
 ## 7. iOS Native — Full Implementation
 
 ### 7.1 AuthGraceSession.swift
+
 ```swift
 import Foundation
 import Security
@@ -452,6 +457,7 @@ class AuthGraceSession {
 ```
 
 ### 7.2 AuthGracePlugin.swift
+
 ```swift
 import Flutter
 import LocalAuthentication
@@ -502,6 +508,7 @@ public class AuthGracePlugin: NSObject, FlutterPlugin {
 ## 8. Dart Layer — Full Implementation
 
 ### 8.1 auth_grace_options.dart
+
 ```dart
 class AuthGraceOptions {
   final int gracePeriodSeconds;
@@ -521,6 +528,7 @@ class AuthGraceOptions {
 ```
 
 ### 8.2 auth_grace_result.dart
+
 ```dart
 enum AuthStatus { success, gracePeriodActive, failed, notAvailable, error }
 enum AuthMethod { biometric, deviceCredential, gracePeriod, none }
@@ -545,6 +553,7 @@ class AuthResult {
 ```
 
 ### 8.3 auth_grace_base.dart
+
 ```dart
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
@@ -668,6 +677,7 @@ class AuthGrace {
 ```
 
 ### 8.4 auth_grace.dart (main export)
+
 ```dart
 library auth_grace;
 
@@ -763,15 +773,15 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
 ## 10. Edge Cases to Handle
 
-| Case | Handling |
-|---|---|
-| Emulator | `isEmulator()` check — skip Keystore, fall through to `local_auth` |
+| Case                                   | Handling                                                           |
+| -------------------------------------- | ------------------------------------------------------------------ |
+| Emulator                               | `isEmulator()` check — skip Keystore, fall through to `local_auth` |
 | Key invalidated after biometric change | Catch `KeyPermanentlyInvalidatedException` — delete and regenerate |
-| No biometric hardware | `isAvailable()` check — return `AuthStatus.notAvailable` |
-| `gracePeriodSeconds = 0` | Always require biometric — no grace |
-| `alwaysRequire = true` | Skip grace period check — always prompt |
-| App resumed from background | Re-check auth in `didChangeAppLifecycleState` |
-| Logout / user switch | Call `auth.reset()` — deletes Keystore key and Keychain timestamp |
+| No biometric hardware                  | `isAvailable()` check — return `AuthStatus.notAvailable`           |
+| `gracePeriodSeconds = 0`               | Always require biometric — no grace                                |
+| `alwaysRequire = true`                 | Skip grace period check — always prompt                            |
+| App resumed from background            | Re-check auth in `didChangeAppLifecycleState`                      |
+| Logout / user switch                   | Call `auth.reset()` — deletes Keystore key and Keychain timestamp  |
 
 ---
 
