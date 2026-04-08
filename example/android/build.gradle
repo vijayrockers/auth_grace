@@ -1,1 +1,20 @@
 // Top-level build file — configuration shared across sub-projects/modules.
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+// Redirect build outputs so Flutter's tooling finds the APK at
+// example/build/app/outputs/flutter-apk/ instead of android/app/build/
+rootProject.buildDir = "../build"
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+    project.evaluationDependsOn(":app")
+}
+
+tasks.register("clean", Delete) {
+    delete rootProject.buildDir
+}

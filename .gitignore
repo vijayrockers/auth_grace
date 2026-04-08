@@ -1,3 +1,46 @@
-
-# FVM Version Cache
+# FVM
 .fvm/
+
+# Dart / Flutter
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+pubspec.lock
+
+# Build outputs
+build/
+**/build/
+
+# Android
+**/android/.gradle/
+**/android/app/build/
+**/android/app/.cxx/
+**/android/local.properties
+**/android/key.properties
+**/android/gradlew
+**/android/gradlew.bat
+**/android/gradle/
+
+# iOS
+**/ios/Pods/
+**/ios/.symlinks/
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/Flutter.podspec
+**/ios/Flutter/App.framework
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/ephemeral/
+**/ios/Runner/GeneratedPluginRegistrant.*
+
+# macOS
+**/macos/Flutter/GeneratedPluginRegistrant.swift
+**/macos/Flutter/ephemeral/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Misc
+*.log
+.DS_Store
