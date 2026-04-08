@@ -1,0 +1,16 @@
+name: auth_grace_example
+description: Demonstrates how to use the auth_grace plugin.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  auth_grace:
+    path: ../
+
+flutter:
+  uses-material-design: true
