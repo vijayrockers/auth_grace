@@ -209,7 +209,7 @@
       "name": "auth_grace",
       "rootUri": "../",
       "packageUri": "lib/",
-      "languageVersion": "3.4"
+      "languageVersion": "3.9"
     }
   ],
   "generator": "pub",

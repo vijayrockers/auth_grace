@@ -1,10 +1,16 @@
 name: auth_grace
 description: Smart biometric auth with grace period. Skips prompt if phone was recently unlocked.
-version: 0.0.1
+version: 0.0.2
 homepage: https://github.com/vijayrockers/auth_grace
 
+topics:
+  - authentication
+  - biometrics
+  - security
+  - local-auth
+
 environment:
-  sdk: ">=3.4.0 <4.0.0"
+  sdk: ">=3.9.0 <4.0.0"
   flutter: ">=3.22.0"
 
 dependencies:

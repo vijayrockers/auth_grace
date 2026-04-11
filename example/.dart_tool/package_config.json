@@ -5,7 +5,7 @@
       "name": "auth_grace",
       "rootUri": "../../",
       "packageUri": "lib/",
-      "languageVersion": "3.4"
+      "languageVersion": "3.9"
     },
     {
       "name": "characters",
@@ -113,7 +113,7 @@
       "name": "auth_grace_example",
       "rootUri": "../",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.9"
     }
   ],
   "generator": "pub",
