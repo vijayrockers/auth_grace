@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'auth_grace'
-  s.version          = '0.0.4'
+  s.version          = '0.0.5'
   s.summary          = 'Smart biometric auth with grace period.'
   s.description      = 'Skips the biometric prompt if the phone was recently unlocked, exactly like GPay.'
   s.homepage         = 'https://github.com/vijayrockers/auth_grace'

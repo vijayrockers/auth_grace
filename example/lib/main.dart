@@ -112,7 +112,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final progress = _gracePeriodSeconds > 0 ? _countdown / _gracePeriodSeconds : 0.0;
+    final progress =
+        _gracePeriodSeconds > 0 ? _countdown / _gracePeriodSeconds : 0.0;
 
     return Scaffold(
       appBar: AppBar(title: const Text('auth_grace example')),
@@ -168,8 +169,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               const SizedBox(height: 12),
               Text(
                 'Grace window closes in $_countdown second${_countdown == 1 ? '' : 's'}',
-                style:
-                    theme.textTheme.bodySmall?.copyWith(color: Colors.grey),
+                style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey),
               ),
               const SizedBox(height: 32),
             ] else ...[

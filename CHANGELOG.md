@@ -1,3 +1,9 @@
+## 0.0.5
+
+* Fix: Example app now included in published package so pub.dev awards the example score point.
+* Fix: Dart formatting applied to `lib/src/auth_grace_base.dart` to pass static analysis on pub.dev.
+* Added demo GIF to README.
+
 ## 0.0.4
 
 * Fix: README demo GIF now renders correctly on pub.dev.
