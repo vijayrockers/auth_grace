@@ -11,7 +11,7 @@ prompt if the phone was recently unlocked, exactly like Google Pay.
 layer: if the device was unlocked within the last N seconds, authentication
 is granted silently without interrupting the user.
 
-![auth_grace demo](https://raw.githubusercontent.com/vijayrockers/auth_grace/main/assets/demo.gif)
+![auth_grace demo](https://github.com/vijayrockers/auth_grace/raw/main/assets/demo.gif)
 
 ---
 
