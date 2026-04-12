@@ -1,3 +1,7 @@
+## 0.0.4
+
+* Fix: README demo GIF now renders correctly on pub.dev.
+
 ## 0.0.3
 
 * Fix: `init()` now always regenerates the Keystore key so changes to `gracePeriodSeconds` take effect immediately without requiring a reinstall.
