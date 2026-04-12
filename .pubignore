@@ -13,8 +13,14 @@ android/local.properties
 # Assets (GIFs, screenshots — referenced via raw GitHub URL in README)
 assets/
 
-# Example app (not needed in published package)
-example/
+# Example build artifacts (keep example/lib/ for pub.dev score)
+example/.dart_tool/
+example/build/
+example/android/build/
+example/android/.gradle/
+example/android/local.properties
+example/ios/.symlinks/
+example/ios/Pods/
 
 # iOS build artifacts
 ios/.symlinks/
