@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
-import 'package:local_auth/local_auth.dart';
+import 'package:local_auth/local_auth.dart'
+    show LocalAuthentication, LocalAuthException, LocalAuthExceptionCode;
 import 'auth_grace_options.dart';
 import 'auth_grace_result.dart';
 
@@ -59,13 +60,13 @@ class AuthGrace {
   ///
   /// Call this once at app startup, before the first [authenticate] call.
   Future<void> init() async {
-    final exists = await _invokeMethod<bool>('keyExists') ?? false;
-    if (!exists) {
-      await _invokeMethod<bool>('generateKey', {
-        'gracePeriodSeconds': options.gracePeriodSeconds,
-        'keyName': options.keyName,
-      });
-    }
+    // Always regenerate the key so that changes to gracePeriodSeconds take
+    // effect immediately. The key is only used for grace period checking,
+    // not for encrypting user data, so regenerating is safe.
+    await _invokeMethod<bool>('generateKey', {
+      'gracePeriodSeconds': options.gracePeriodSeconds,
+      'keyName': options.keyName,
+    });
   }
 
   /// Authenticates the user, honouring the configured grace period.
@@ -112,6 +113,8 @@ class AuthGrace {
     try {
       final success = await _localAuth.authenticate(
         localizedReason: options.reason,
+        biometricOnly: !options.allowDeviceCredential,
+        persistAcrossBackgrounding: true,
       );
 
       if (success) {
@@ -126,6 +129,12 @@ class AuthGrace {
       return const AuthResult(
         status: AuthStatus.failed,
         method: AuthMethod.none,
+      );
+    } on LocalAuthException catch (e) {
+      return AuthResult(
+        status: _statusFromException(e.code),
+        method: AuthMethod.none,
+        error: e.description,
       );
     } catch (e) {
       return AuthResult(
@@ -186,6 +195,23 @@ class AuthGrace {
   /// On Android the Keystore handles grace period tracking natively.
   Future<void> _markAuthenticated() async {
     await _invokeMethod<bool>('markAuthenticated');
+  }
+
+  AuthStatus _statusFromException(LocalAuthExceptionCode code) {
+    switch (code) {
+      case LocalAuthExceptionCode.noCredentialsSet:
+      case LocalAuthExceptionCode.noBiometricsEnrolled:
+      case LocalAuthExceptionCode.noBiometricHardware:
+      case LocalAuthExceptionCode.biometricHardwareTemporarilyUnavailable:
+        return AuthStatus.notAvailable;
+      case LocalAuthExceptionCode.userCanceled:
+      case LocalAuthExceptionCode.timeout:
+      case LocalAuthExceptionCode.systemCanceled:
+      case LocalAuthExceptionCode.userRequestedFallback:
+        return AuthStatus.failed;
+      default:
+        return AuthStatus.error;
+    }
   }
 
   Future<T?> _invokeMethod<T>(String method,

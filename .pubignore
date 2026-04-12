@@ -1,0 +1,23 @@
+# Dart tooling
+.dart_tool/
+
+# VS Code
+.vscode/
+
+# Build outputs
+build/
+android/build/
+android/.gradle/
+android/local.properties
+
+# Assets (GIFs, screenshots — referenced via raw GitHub URL in README)
+assets/
+
+# Example app (not needed in published package)
+example/
+
+# iOS build artifacts
+ios/.symlinks/
+ios/Pods/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec

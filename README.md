@@ -11,6 +11,8 @@ prompt if the phone was recently unlocked, exactly like Google Pay.
 layer: if the device was unlocked within the last N seconds, authentication
 is granted silently without interrupting the user.
 
+![auth_grace demo](https://raw.githubusercontent.com/vijayrockers/auth_grace/main/assets/demo.gif)
+
 ---
 
 ## Platform support
@@ -49,7 +51,7 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  auth_grace: ^0.0.1
+  auth_grace: ^0.0.3
 ```
 
 Then run:
