@@ -60,13 +60,13 @@ class AuthGrace {
   ///
   /// Call this once at app startup, before the first [authenticate] call.
   Future<void> init() async {
-    final exists = await _invokeMethod<bool>('keyExists') ?? false;
-    if (!exists) {
-      await _invokeMethod<bool>('generateKey', {
-        'gracePeriodSeconds': options.gracePeriodSeconds,
-        'keyName': options.keyName,
-      });
-    }
+    // Always regenerate the key so that changes to gracePeriodSeconds take
+    // effect immediately. The key is only used for grace period checking,
+    // not for encrypting user data, so regenerating is safe.
+    await _invokeMethod<bool>('generateKey', {
+      'gracePeriodSeconds': options.gracePeriodSeconds,
+      'keyName': options.keyName,
+    });
   }
 
   /// Authenticates the user, honouring the configured grace period.

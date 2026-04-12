@@ -1,3 +1,11 @@
+## 0.0.3
+
+* Fix: `init()` now always regenerates the Keystore key so changes to `gracePeriodSeconds` take effect immediately without requiring a reinstall.
+* Fix: Grace period countdown is now driven by `isWithinGracePeriod()` polled every second — locks exactly when the Keystore expires, not based on a drifting Dart timer.
+* Fix: `gracePeriodActive` (device-unlock grace) now shows the countdown timer in the example app.
+* Example: Added circular countdown UI showing remaining grace window in seconds, turns orange at 2 seconds remaining.
+* Example: Grace period timer auto-locks the UI when expired — no automatic re-prompt.
+
 ## 0.0.2
 
 * Fix: Updated `authenticate()` call for `local_auth` 3.x API — `AuthenticationOptions` replaced with flat parameters (`biometricOnly`, `persistAcrossBackgrounding`).
