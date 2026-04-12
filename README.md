@@ -51,7 +51,7 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  auth_grace: ^0.0.3
+  auth_grace: ^0.0.4
 ```
 
 Then run:

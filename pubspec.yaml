@@ -1,6 +1,6 @@
 name: auth_grace
 description: Smart biometric auth with grace period. Skips prompt if phone was recently unlocked.
-version: 0.0.3
+version: 0.0.4
 homepage: https://github.com/vijayrockers/auth_grace
 
 topics:
