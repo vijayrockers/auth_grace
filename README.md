@@ -11,7 +11,13 @@ prompt if the phone was recently unlocked, exactly like Google Pay.
 layer: if the device was unlocked within the last N seconds, authentication
 is granted silently without interrupting the user.
 
-![auth_grace demo](https://github.com/vijayrockers/auth_grace/raw/main/assets/demo.gif)
+<p align="center">
+  <b>Grace period in action — no prompt while the device is still warm.</b>
+</p>
+
+<p align="center">
+  <img src="https://github.com/vijayrockers/auth_grace/raw/main/assets/demo.gif" width="300" alt="auth_grace demo" />
+</p>
 
 ---
 
@@ -51,7 +57,7 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  auth_grace: ^0.0.5
+  auth_grace: ^0.0.6
 ```
 
 Then run:
@@ -262,6 +268,46 @@ bypass it.
 **iOS** — Grace period is simulated via a Keychain timestamp recorded
 after each successful authentication. Functionally identical for most
 use cases, but software-managed rather than hardware-enforced.
+
+---
+
+## Security model
+
+`auth_grace` is a **UX friction layer**, not a cryptographic access control
+system. Understanding its boundaries helps you use it correctly.
+
+**What it protects against**
+
+- A stranger picking up an unlocked phone after the grace period expires — the
+  next open will require biometrics.
+- Passive shoulder-surfing — the biometric prompt adds meaningful friction for
+  casual observers.
+- Unauthorized access after the device is re-locked.
+
+**What it does NOT protect against**
+
+- A coerced user (someone forced to authenticate) — no biometric library can
+  prevent this.
+- Rooted (Android) or jailbroken (iOS) devices — the Keystore / Keychain
+  integrity guarantees do not hold on compromised systems.
+- Access during the grace window itself — if someone grabs the phone in those
+  30 seconds, they get in. That is the intended trade-off.
+- iOS Keychain timestamp manipulation — the iOS grace period is
+  software-managed. A sophisticated attacker with direct Keychain access could
+  theoretically alter the timestamp. Android's TEE-enforced key is not
+  vulnerable to this.
+
+**Appropriate use cases**
+
+Confirming the active user's identity before showing sensitive content (account
+balance, health data) or initiating a local action (like Google Pay's
+tap-to-pay). This mirrors how the OS itself uses biometrics.
+
+**Not appropriate on its own for**
+
+Authorising server-side transactions or protecting encryption keys. Always
+pair `auth_grace` with server-side verification for any action with real
+financial or security consequences.
 
 ---
 
