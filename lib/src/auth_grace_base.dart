@@ -114,7 +114,7 @@ class AuthGrace {
       final success = await _localAuth.authenticate(
         localizedReason: options.reason,
         biometricOnly: !options.allowDeviceCredential,
-        persistAcrossBackgrounding: true,
+        persistAcrossBackgrounding: options.persistAcrossBackgrounding,
       );
 
       if (success) {

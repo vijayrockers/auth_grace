@@ -73,6 +73,7 @@ void main() {
       expect(opts.alwaysRequire, false);
       expect(opts.reason, 'Authenticate to continue');
       expect(opts.allowDeviceCredential, true);
+      expect(opts.persistAcrossBackgrounding, true);
       expect(opts.keyName, 'com.authgrace.auth_grace_key');
     });
 

@@ -207,6 +207,7 @@ await auth.reset();
 | `alwaysRequire` | `bool` | `false` | Always prompt regardless of grace period. |
 | `reason` | `String` | `'Authenticate to continue'` | Biometric dialog message. |
 | `allowDeviceCredential` | `bool` | `true` | Allow PIN/pattern as fallback. |
+| `persistAcrossBackgrounding` | `bool` | `true` | Keep the biometric prompt visible when the app is backgrounded mid-auth. |
 | `keyName` | `String` | `'com.authgrace.auth_grace_key'` | Custom Keystore key name. |
 
 ---
