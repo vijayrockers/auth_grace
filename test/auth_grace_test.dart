@@ -221,20 +221,14 @@ void main() {
     });
 
     test('returns success when grace expired and biometric passes', () async {
-      _mockChannels(
-        isWithinGracePeriod: false,
-        localAuthResult: true,
-      );
+      _mockChannels(isWithinGracePeriod: false, localAuthResult: true);
       final result = await AuthGrace().authenticate();
       expect(result.status, AuthStatus.success);
       expect(result.method, AuthMethod.biometric);
     });
 
     test('returns failed when grace expired and biometric fails', () async {
-      _mockChannels(
-        isWithinGracePeriod: false,
-        localAuthResult: false,
-      );
+      _mockChannels(isWithinGracePeriod: false, localAuthResult: false);
       final result = await AuthGrace().authenticate();
       expect(result.status, AuthStatus.failed);
     });

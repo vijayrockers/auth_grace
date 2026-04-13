@@ -159,8 +159,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                       ),
                       Text(
                         'sec',
-                        style: theme.textTheme.bodySmall
-                            ?.copyWith(color: Colors.grey),
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: Colors.grey,
+                        ),
                       ),
                     ],
                   ),

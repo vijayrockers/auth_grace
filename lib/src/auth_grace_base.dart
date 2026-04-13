@@ -214,8 +214,10 @@ class AuthGrace {
     }
   }
 
-  Future<T?> _invokeMethod<T>(String method,
-      [Map<String, dynamic>? args]) async {
+  Future<T?> _invokeMethod<T>(
+    String method, [
+    Map<String, dynamic>? args,
+  ]) async {
     try {
       return await _channel.invokeMethod<T>(method, args);
     } catch (_) {
