@@ -1,5 +1,6 @@
 ## 0.0.6
 
+* Added `persistAcrossBackgrounding` option to `AuthGraceOptions` — controls whether the biometric prompt stays visible when the app is backgrounded mid-auth. Defaults to `true`.
 * Added 28 unit tests covering `AuthGraceOptions`, `AuthResult`, `AuthGrace` constructor, `init()`, `authenticate()`, `isWithinGracePeriod()`, `isHardwareBacked()`, and `reset()`.
 * Added integration tests (`integration_test/`) for native Keystore/Keychain calls — runs on real device or emulator without triggering the biometric prompt.
 * README: Added `## Security model` section — documents what the package protects against, known limitations, and appropriate vs. inappropriate use cases.
