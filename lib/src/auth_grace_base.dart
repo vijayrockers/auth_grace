@@ -114,7 +114,7 @@ class AuthGrace {
       final success = await _localAuth.authenticate(
         localizedReason: options.reason,
         biometricOnly: !options.allowDeviceCredential,
-        persistAcrossBackgrounding: true,
+        persistAcrossBackgrounding: options.persistAcrossBackgrounding,
       );
 
       if (success) {
@@ -214,8 +214,10 @@ class AuthGrace {
     }
   }
 
-  Future<T?> _invokeMethod<T>(String method,
-      [Map<String, dynamic>? args]) async {
+  Future<T?> _invokeMethod<T>(
+    String method, [
+    Map<String, dynamic>? args,
+  ]) async {
     try {
       return await _channel.invokeMethod<T>(method, args);
     } catch (_) {

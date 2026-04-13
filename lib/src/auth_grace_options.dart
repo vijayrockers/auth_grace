@@ -52,6 +52,18 @@ class AuthGraceOptions {
   /// Defaults to `true`.
   final bool allowDeviceCredential;
 
+  /// Whether the biometric prompt stays visible when the app is moved to the
+  /// background during authentication.
+  ///
+  /// When `true` (the default), the prompt remains on screen if the user
+  /// switches away mid-authentication — useful when a password manager needs
+  /// to briefly background the app to copy a credential.
+  ///
+  /// Set to `false` to dismiss the prompt automatically on backgrounding.
+  ///
+  /// Defaults to `true`.
+  final bool persistAcrossBackgrounding;
+
   /// The name used for the underlying Android Keystore key.
   ///
   /// Override this only if you need multiple independent grace windows inside
@@ -71,6 +83,7 @@ class AuthGraceOptions {
     this.alwaysRequire = false,
     this.reason = 'Authenticate to continue',
     this.allowDeviceCredential = true,
+    this.persistAcrossBackgrounding = true,
     this.keyName = 'com.authgrace.auth_grace_key',
   });
 }
