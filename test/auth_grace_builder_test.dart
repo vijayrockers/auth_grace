@@ -145,5 +145,35 @@ void main() {
       expect(results, hasLength(1));
       expect(results.first.status, AuthStatus.gracePeriodActive);
     });
+
+    testWidgets('re-auths when AppLifecycleState.resumed fires', (tester) async {
+      int gracePeriodCallCount = 0;
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(_authGraceChannel, (call) async {
+        if (call.method == 'isWithinGracePeriod') {
+          gracePeriodCallCount++;
+          return true; // grace period active — fast path, no local_auth needed
+        }
+        return null;
+      });
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(_localAuthChannel, (call) async => null);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: AuthGraceBuilder(
+            auth: AuthGrace(),
+            builder: (ctx, result) => const Text('done'),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(gracePeriodCallCount, 1); // initial call
+
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+      await tester.pumpAndSettle();
+
+      expect(gracePeriodCallCount, 2); // resume triggered a second call
+    });
   });
 }
