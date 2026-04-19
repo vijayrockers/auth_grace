@@ -125,5 +125,25 @@ void main() {
       expect(received!.status, AuthStatus.gracePeriodActive);
       expect(find.text('done'), findsOneWidget);
     });
+
+    testWidgets('calls onResult with the result after setState', (tester) async {
+      // Default mock: grace period active → AuthStatus.gracePeriodActive
+      _mockChannels(isWithinGracePeriod: true);
+
+      final results = <AuthResult>[];
+      await tester.pumpWidget(
+        MaterialApp(
+          home: AuthGraceBuilder(
+            auth: AuthGrace(),
+            builder: (ctx, result) => const Text('done'),
+            onResult: results.add,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(results, hasLength(1));
+      expect(results.first.status, AuthStatus.gracePeriodActive);
+    });
   });
 }
