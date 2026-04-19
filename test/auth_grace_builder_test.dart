@@ -57,4 +57,73 @@ void _clearMocks() {
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   tearDown(_clearMocks);
+
+  group('AuthGraceBuilder', () {
+    testWidgets('shows loadingWidget while first auth is in progress',
+        (tester) async {
+      // Use a Completer to hold isWithinGracePeriod in-flight reliably.
+      final completer = Completer<dynamic>();
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(_authGraceChannel, (call) async {
+        if (call.method == 'isWithinGracePeriod') return completer.future;
+        return null;
+      });
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(_localAuthChannel, (call) async => null);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: AuthGraceBuilder(
+            auth: AuthGrace(),
+            builder: (ctx, result) => const Text('done'),
+            loadingWidget: const Text('loading'),
+          ),
+        ),
+      );
+      await tester.pump();
+
+      expect(find.text('loading'), findsOneWidget);
+      expect(find.text('done'), findsNothing);
+
+      completer.complete(true); // grace period active → auth completes
+      await tester.pumpAndSettle();
+
+      expect(find.text('done'), findsOneWidget);
+      expect(find.text('loading'), findsNothing);
+    });
+
+    testWidgets('calls authenticate() exactly once on initState and passes result to builder',
+        (tester) async {
+      int gracePeriodCallCount = 0;
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(_authGraceChannel, (call) async {
+        if (call.method == 'isWithinGracePeriod') {
+          gracePeriodCallCount++;
+          return true; // grace period active
+        }
+        return null;
+      });
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(_localAuthChannel, (call) async => null);
+
+      AuthResult? received;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: AuthGraceBuilder(
+            auth: AuthGrace(),
+            builder: (ctx, result) {
+              received = result;
+              return const Text('done');
+            },
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(gracePeriodCallCount, 1); // authenticate() called exactly once
+      expect(received, isNotNull);
+      expect(received!.status, AuthStatus.gracePeriodActive);
+      expect(find.text('done'), findsOneWidget);
+    });
+  });
 }
