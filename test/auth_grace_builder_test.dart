@@ -175,5 +175,69 @@ void main() {
 
       expect(gracePeriodCallCount, 2); // resume triggered a second call
     });
+
+    testWidgets('skips resume re-auth when first auth is in flight',
+        (tester) async {
+      // Use Completer so local_auth.authenticate does not return until we say so.
+      final completer = Completer<bool>();
+      int localAuthCount = 0;
+
+      // Grace period inactive → forces the code into the biometric path.
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(_authGraceChannel, (call) async {
+        switch (call.method) {
+          case 'isWithinGracePeriod':
+            return false;
+          case 'generateKey':
+            return true;
+          case 'markAuthenticated':
+            return true;
+          default:
+            return null;
+        }
+      });
+
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(_localAuthChannel, (call) async {
+        switch (call.method) {
+          case 'authenticate':
+            localAuthCount++;
+            return await completer.future; // blocked until completed
+          case 'isDeviceSupported':
+            return true;
+          case 'canCheckBiometrics':
+            return true;
+          case 'getAvailableBiometrics':
+            return <String>['fingerprint'];
+          default:
+            return null;
+        }
+      });
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: AuthGraceBuilder(
+            auth: AuthGrace(),
+            builder: (ctx, result) => const Text('done'),
+            loadingWidget: const Text('loading'),
+          ),
+        ),
+      );
+
+      // Pump enough for initState to run and reach the blocked Completer.
+      await tester.pump();
+      await tester.pump();
+      expect(find.text('loading'), findsOneWidget); // still in-flight
+
+      // Simulate resume while first auth is still blocked.
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+
+      // Now unblock the first auth.
+      completer.complete(true);
+      await tester.pumpAndSettle();
+
+      expect(localAuthCount, 1); // resume was skipped — guard worked
+      expect(find.text('done'), findsOneWidget);
+    });
   });
 }
