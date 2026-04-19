@@ -51,5 +51,6 @@
 library;
 
 export 'src/auth_grace_base.dart';
+export 'src/auth_grace_builder.dart';
 export 'src/auth_grace_options.dart';
 export 'src/auth_grace_result.dart';
