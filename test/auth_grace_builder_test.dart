@@ -65,7 +65,7 @@ void main() {
       final completer = Completer<dynamic>();
       TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
           .setMockMethodCallHandler(_authGraceChannel, (call) async {
-        if (call.method == 'isWithinGracePeriod') return completer.future;
+        if (call.method == 'isWithinGracePeriod') return await completer.future;
         return null;
       });
       TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
