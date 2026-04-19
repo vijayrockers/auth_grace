@@ -101,6 +101,7 @@ class _AuthGraceBuilderState extends State<AuthGraceBuilder>
       _isAuthInFlight = false;
     }
 
+    // ignore: unnecessary_null_comparison
     if (!mounted || result == null) return;
     setState(() => _result = result);
     widget.onResult?.call(result);
